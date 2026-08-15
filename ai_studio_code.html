@@ -117,6 +117,61 @@
             90% { opacity: 1; }
             100% { opacity: 0; transform: translate(500px, 500px) rotate(45deg); }
         }
+
+        /* --- ANIMATED MUSIC ICONS --- */
+        .music-playing {
+            display: inline-flex;
+            gap: 2px;
+            align-items: flex-end;
+            margin-left: 6px;
+        }
+
+        .music-bar {
+            width: 2px;
+            background: linear-gradient(180deg, #00f7ff, #7de8ff);
+            border-radius: 1px;
+            animation: musicBarPulse 0.6s ease-in-out infinite;
+        }
+
+        .music-bar:nth-child(1) {
+            height: 8px;
+            animation-delay: 0s;
+        }
+
+        .music-bar:nth-child(2) {
+            height: 12px;
+            animation-delay: 0.15s;
+        }
+
+        .music-bar:nth-child(3) {
+            height: 10px;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes musicBarPulse {
+            0%, 100% { transform: scaleY(0.6); opacity: 0.6; }
+            50% { transform: scaleY(1); opacity: 1; }
+        }
+
+        .playlist-track-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 10px;
+        }
+
+        .playlist-item.current .playlist-track-icon {
+            color: #00f7ff;
+        }
+
+        .playlist-item.current .music-playing {
+            display: inline-flex;
+        }
+
         /* --- GLASS UI --- */
         .glass {
             background: var(--glass);
@@ -491,7 +546,14 @@
         <div class="dashboard-inner">
             <div class="dashboard-left">
                 <div class="radio-badge">Night Drive</div>
-                <div id="track-name" class="dashboard-title">Music Loading....</div>
+                <div id="track-name-container" class="dashboard-title flex items-center">
+                    <span id="track-name">Music Loading....</span>
+                    <div id="playing-indicator" class="music-playing" style="display: none;">
+                        <div class="music-bar"></div>
+                        <div class="music-bar"></div>
+                        <div class="music-bar"></div>
+                    </div>
+                </div>
             </div>
 
             <div class="dashboard-progress">
@@ -633,18 +695,33 @@
                 label
             }));
 
-            listEl.innerHTML = tracks.map((track, index) => `
+            const currentIndex = player && player.getPlaylistIndex ? player.getPlaylistIndex() : 0;
+
+            listEl.innerHTML = tracks.map((track, index) => {
+                const isCurrentTrack = index === currentIndex;
+                return `
                 <button
                     data-index="${index}"
-                    class="playlist-item w-full text-left rounded-xl border border-white/5 px-3 py-2 transition-all hover:border-cyan-400/50 hover:bg-white/5 ${index === (player && player.getPlaylistIndex ? player.getPlaylistIndex() : 0) ? 'bg-cyan-400/10 border-cyan-400/40' : ''}"
+                    class="playlist-item w-full text-left rounded-xl border border-white/5 px-3 py-2 transition-all hover:border-cyan-400/50 hover:bg-white/5 ${isCurrentTrack ? 'bg-cyan-400/10 border-cyan-400/40 current' : ''}"
                     type="button"
                 >
                     <div class="flex items-center justify-between gap-3">
                         <div class="text-[10px] tracking-[3px] uppercase opacity-60">${String(index + 1).padStart(2, '0')}</div>
-                        <div class="text-[10px] tracking-[2px] uppercase truncate">${track.label || fallbackPlaylistTracks[index] || `Night Drive ${String(index + 1).padStart(2, '0')}`}</div>
+                        <div class="flex items-center gap-2 flex-1 min-w-0">
+                            <div class="playlist-track-icon">
+                                ${isCurrentTrack ? '<span>♪</span>' : '<span>♫</span>'}
+                            </div>
+                            <div class="text-[10px] tracking-[2px] uppercase truncate">${track.label || fallbackPlaylistTracks[index] || `Night Drive ${String(index + 1).padStart(2, '0')}`}</div>
+                        </div>
+                        ${isCurrentTrack ? `<div class="music-playing">
+                            <div class="music-bar"></div>
+                            <div class="music-bar"></div>
+                            <div class="music-bar"></div>
+                        </div>` : ''}
                     </div>
                 </button>
-            `).join('');
+            `;
+            }).join('');
 
             listEl.querySelectorAll('.playlist-item').forEach((button) => {
                 button.addEventListener('click', () => {
@@ -728,9 +805,11 @@
         function onPlayerStateChange(event) {
             const icon = document.getElementById('play-icon');
             const nameEl = document.getElementById('track-name');
+            const playingIndicator = document.getElementById('playing-indicator');
 
             if (event.data === YT.PlayerState.PLAYING) {
                 icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+                if (playingIndicator) playingIndicator.style.display = 'inline-flex';
                 updateProgress();
                 refreshPlaylist();
                 try {
@@ -739,6 +818,7 @@
                 } catch (e) {}
             } else {
                 icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
+                if (playingIndicator) playingIndicator.style.display = 'none';
             }
         }
 
