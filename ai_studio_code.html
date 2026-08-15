@@ -884,9 +884,6 @@
             document.getElementById('overlay').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('overlay').style.display = 'none';
-                if(player && player.playVideo) {
-                    player.playVideo();
-                }
                 startVisuals();
             }, 1000);
         }
@@ -909,6 +906,7 @@
         }
 
         function togglePlay() {
+            if (!player || !player.getPlayerState) return;
             const state = player.getPlayerState();
             if (state === YT.PlayerState.PLAYING) player.pauseVideo();
             else player.playVideo();
