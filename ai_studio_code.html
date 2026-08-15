@@ -22,6 +22,7 @@
             font-family: 'Outfit', sans-serif;
             overflow-x: hidden;
             height: 100%;
+            position: relative;
         }
 
         /* --- 3D MOVING HIGHWAY --- */
@@ -31,43 +32,54 @@
             left: 0;
             width: 100%;
             height: 100vh;
-            z-index: -1;
+            z-index: 0;
             overflow: hidden;
             background-image:
-                linear-gradient(rgba(0, 0, 0, 0.52), rgba(0, 0, 0, 0.82)),
+                linear-gradient(rgba(0, 0, 0, 0.18), rgba(0, 0, 0, 0.55)),
                 url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80');
             background-size: cover;
-            background-position: center;
+            background-position: center 72%;
             background-repeat: no-repeat;
             filter: saturate(0.8) contrast(1.2) brightness(0.7);
+        }
+
+        .scenic-container::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 35% 0;
+            background: linear-gradient(to bottom, rgba(2, 2, 6, 0.92), rgba(2, 2, 6, 0.0));
+            pointer-events: none;
+            z-index: 1;
         }
 
         .windshield-overlay {
             position: absolute;
             inset: 0;
+            z-index: 1;
             background:
                 linear-gradient(90deg, rgba(255,255,255,0.18), transparent 16%, transparent 84%, rgba(255,255,255,0.12)),
                 radial-gradient(circle at 35% 18%, rgba(255,255,255,0.18), transparent 22%),
                 radial-gradient(circle at 68% 30%, rgba(255,255,255,0.12), transparent 18%);
             mix-blend-mode: screen;
-            opacity: 0.8;
+            opacity: 0.48;
             pointer-events: none;
         }
 
         .dashboard-panel {
             position: absolute;
             left: 50%;
-            bottom: 2.5rem;
+            bottom: 1.8rem;
             transform: translateX(-50%);
-            width: min(52vw, 440px);
-            height: 130px;
-            border-radius: 22px;
-            background: linear-gradient(180deg, rgba(11, 12, 17, 0.22), rgba(5, 6, 10, 0.75));
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: inset 0 0 30px rgba(255,255,255,0.03), 0 10px 30px rgba(0,0,0,0.5);
+            width: min(48vw, 400px);
+            height: 110px;
+            z-index: 2;
+            border-radius: 20px;
+            background: linear-gradient(180deg, rgba(11, 12, 17, 0.18), rgba(5, 6, 10, 0.65));
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.04), 0 10px 28px rgba(0,0,0,0.45);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
-            opacity: 0.95;
+            opacity: 0.9;
             pointer-events: none;
         }
 
@@ -131,7 +143,16 @@
         .car-scene {
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(3,5,12,0.3), rgba(4,6,12,0.82));
+            z-index: 1;
+            background: linear-gradient(to bottom, rgba(3,5,12,0.12), rgba(4,6,12,0.4));
+        }
+
+        .scene-vignette {
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.08), rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.38) 100%);
+            pointer-events: none;
         }
 
         .sky-glow {
@@ -143,9 +164,9 @@
         .road-perspective {
             position: absolute;
             left: 50%;
-            bottom: -12%;
-            width: 170vw;
-            height: 110vh;
+            bottom: -34%;
+            width: 150vw;
+            height: 128vh;
             transform: translateX(-50%) perspective(900px) rotateX(68deg);
             overflow: hidden;
             border-radius: 28% 28% 0 0 / 22% 22% 0 0;
@@ -158,23 +179,27 @@
             position: absolute;
             inset: 0;
             background:
-                linear-gradient(90deg, transparent 48.8%, rgba(255,255,255,0.15) 49.2%, transparent 49.6%),
-                linear-gradient(90deg, transparent 51.2%, rgba(255,255,255,0.15) 51.6%, transparent 52.0%),
+                linear-gradient(90deg, transparent 48.8%, rgba(255,255,255,0.22) 49.2%, transparent 49.6%),
+                linear-gradient(90deg, transparent 51.2%, rgba(255,255,255,0.2) 51.6%, transparent 52.0%),
                 repeating-linear-gradient(
                     to bottom,
-                    rgba(255,255,255,0.08) 0,
-                    rgba(255,255,255,0.08) 10%,
-                    transparent 10%,
-                    transparent 24%
+                    rgba(255,255,255,0.1) 0,
+                    rgba(255,255,255,0.1) 8%,
+                    transparent 8%,
+                    transparent 18%
                 );
-            animation: roadFlow 1.3s linear infinite;
+            animation: roadFlow 0.8s linear infinite;
+            filter: blur(0.4px);
         }
 
         .road-perspective::after {
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
+            background:
+                linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)),
+                radial-gradient(circle at 50% 28%, rgba(255, 174, 110, 0.18), transparent 18%),
+                linear-gradient(90deg, transparent 35%, rgba(255,120,50,0.14) 45%, rgba(255,120,50,0.18) 50%, rgba(255,120,50,0.14) 55%, transparent 65%);
         }
 
         .lane-markers {
@@ -184,20 +209,31 @@
                 repeating-linear-gradient(
                     to bottom,
                     transparent 0,
-                    transparent 12%,
-                    rgba(255,255,255,0.6) 12%,
-                    rgba(255,255,255,0.6) 16%,
-                    transparent 16%,
-                    transparent 24%
+                    transparent 10%,
+                    rgba(255,255,255,0.65) 10%,
+                    rgba(255,255,255,0.65) 13%,
+                    transparent 13%,
+                    transparent 20%
                 );
-            opacity: 0.4;
-            animation: roadFlow 1.2s linear infinite;
+            opacity: 0.85;
+            filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
+            animation: roadFlow 0.9s linear infinite;
+        }
+
+        .headlight-reflections {
+            position: absolute;
+            left: 50%;
+            bottom: 8%;
+            width: 74%;
+            height: 44%;
+            transform: translateX(-50%);
+            background: linear-gradient(to bottom, rgba(255,150,80,0.12), rgba(255,120,60,0.05) 32%, transparent 68%);
+            filter: blur(12px);
+            pointer-events: none;
         }
 
         .side-poles {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
+            display: none;
         }
 
         .pole {
@@ -304,6 +340,77 @@
             opacity: 0;
             pointer-events: none;
             z-index: 1000;
+        }
+
+        .center-console-glow {
+            position: absolute;
+            left: 50%;
+            bottom: 8.5rem;
+            transform: translateX(-50%);
+            width: min(34vw, 320px);
+            height: 72px;
+            border-radius: 999px;
+            background: radial-gradient(circle, rgba(118, 238, 255, 0.32), rgba(34, 64, 81, 0.18) 42%, transparent 72%);
+            filter: blur(18px);
+            pointer-events: none;
+            opacity: 0.9;
+        }
+
+        .steering-wheel {
+            position: absolute;
+            left: 50%;
+            bottom: 7.5rem;
+            width: 200px;
+            height: 200px;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: radial-gradient(circle at center, rgba(30, 32, 36, 0.4), rgba(8, 9, 12, 0.9) 58%, rgba(0,0,0,0.92) 76%);
+            box-shadow: inset 0 0 18px rgba(255,255,255,0.05), 0 18px 40px rgba(0,0,0,0.45);
+            opacity: 0.96;
+        }
+
+        .steering-wheel::before,
+        .steering-wheel::after {
+            content: "";
+            position: absolute;
+            inset: 18px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .steering-wheel::after {
+            inset: 34px;
+            border-color: rgba(255,255,255,0.06);
+        }
+
+        .steering-spoke {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 2px;
+            height: 88px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0.45), rgba(255,255,255,0.12));
+            transform-origin: center;
+            border-radius: 999px;
+        }
+
+        .steering-spoke:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg); }
+        .steering-spoke:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg); }
+        .steering-spoke:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg); }
+        .steering-spoke:nth-child(4) { transform: translate(-50%, -50%) rotate(135deg); }
+
+        .steering-center {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 28px;
+            height: 28px;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(110, 228, 255, 0.4), rgba(25, 41, 52, 0.9) 40%, rgba(0,0,0,0.95) 70%);
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 0 16px rgba(39, 193, 255, 0.25);
         }
 
         .start-screen {
@@ -535,6 +642,14 @@
     <!-- BACKGROUND -->
     <div class="scenic-container">
         <div class="windshield-overlay"></div>
+        <div class="center-console-glow"></div>
+        <div class="steering-wheel" aria-hidden="true">
+            <div class="steering-spoke"></div>
+            <div class="steering-spoke"></div>
+            <div class="steering-spoke"></div>
+            <div class="steering-spoke"></div>
+            <div class="steering-center"></div>
+        </div>
         <div class="dashboard-panel" aria-hidden="true">
             <div class="dashboard-gauge">
                 <div class="gauge-ring"></div>
@@ -546,6 +661,7 @@
             <div class="rain-layer"></div>
             <div class="road-perspective">
                 <div class="lane-markers"></div>
+                <div class="headlight-reflections"></div>
             </div>
             <div class="side-poles">
                 <div class="pole" style="left: 10%; height: 26vh; animation-delay: 0.2s;"></div>
@@ -558,7 +674,7 @@
             </div>
             <div class="windshield-glow"></div>
         </div>
-        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black"></div>
+        <div class="scene-vignette"></div>
     </div>
 
     <!-- MAIN SCROLLABLE CONTENT -->
@@ -901,11 +1017,12 @@
             const f = document.getElementById('flash');
             f.style.opacity = '0.3';
             setTimeout(() => f.style.opacity = '0', 100);
-            
-            // Visual feedback on dash
-            const dash = document.querySelector('.dash-visual');
-            dash.style.transform = 'scale(0.98)';
-            setTimeout(() => dash.style.transform = 'scale(1)', 100);
+
+            const dash = document.querySelector('.dashboard-strip');
+            if (dash) {
+                dash.style.transform = 'translateX(-50%) scale(0.985)';
+                setTimeout(() => dash.style.transform = 'translateX(-50%) scale(1)', 100);
+            }
         }
 
         // Inputs
