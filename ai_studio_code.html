@@ -25,264 +25,98 @@
             position: relative;
         }
 
-        /* --- 3D MOVING HIGHWAY --- */
-        .scenic-container {
-            display: none;
-        }
-
-        .windshield-overlay {
-            display: none;
-        }
-
-        .dashboard-panel {
-            position: absolute;
-            left: 50%;
-            bottom: 1.8rem;
-            transform: translateX(-50%);
-            width: min(48vw, 400px);
-            height: 110px;
-            z-index: 2;
-            border-radius: 20px;
-            background: linear-gradient(180deg, rgba(11, 12, 17, 0.18), rgba(5, 6, 10, 0.65));
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: inset 0 0 20px rgba(255,255,255,0.04), 0 10px 28px rgba(0,0,0,0.45);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            opacity: 0.9;
-            pointer-events: none;
-        }
-
-        .dashboard-panel::before {
-            content: "";
-            position: absolute;
-            inset: 12% 10% auto 10%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        }
-
-        .dashboard-gauge {
-            position: absolute;
-            inset: 18px 22px 12px 22px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .gauge-ring {
-            position: relative;
-            width: 118px;
-            height: 118px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.18);
-            background: radial-gradient(circle, rgba(255,255,255,0.04), rgba(0,0,0,0.22));
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.46);
-        }
-
-        .gauge-ring::before,
-        .gauge-ring::after {
-            content: "";
-            position: absolute;
-            inset: 12px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .gauge-ring::after {
-            inset: 18px;
-            border-color: rgba(255,255,255,0.06);
-        }
-
-        .gauge-center {
-            position: absolute;
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.45);
-            border: 1px solid rgba(255,255,255,0.06);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255,255,255,0.72);
-            font-family: 'Outfit', sans-serif;
-            font-size: 11px;
-            letter-spacing: 0.22rem;
-            text-transform: uppercase;
-        }
-
-        .car-scene {
-            position: absolute;
+        /* --- STARFIELD BACKGROUND --- */
+        .motion-bg {
+            position: fixed;
             inset: 0;
-            z-index: 1;
-            background: linear-gradient(to bottom, rgba(3,5,12,0.12), rgba(4,6,12,0.4));
-        }
-
-        .scene-vignette {
-            position: absolute;
-            inset: 0;
-            z-index: 4;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.08), rgba(0,0,0,0.2) 30%, rgba(0,0,0,0.38) 100%);
-            pointer-events: none;
-        }
-
-        .sky-glow {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 25%, rgba(87, 117, 255, 0.18), transparent 25%);
-        }
-
-        .road-perspective {
-            position: absolute;
-            left: 50%;
-            bottom: -34%;
-            width: 150vw;
-            height: 128vh;
-            transform: translateX(-50%) perspective(900px) rotateX(68deg);
+            z-index: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(20, 25, 60, 0.8) 0%, rgba(5, 8, 25, 0.95) 50%, #000 100%);
             overflow: hidden;
-            border-radius: 28% 28% 0 0 / 22% 22% 0 0;
-            background: linear-gradient(to bottom, rgba(23,24,29,0.8), rgba(10,12,15,0.95));
-            box-shadow: inset 0 0 120px rgba(0, 0, 0, 0.8);
-        }
-
-        .road-perspective::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(90deg, transparent 48.8%, rgba(255,255,255,0.22) 49.2%, transparent 49.6%),
-                linear-gradient(90deg, transparent 51.2%, rgba(255,255,255,0.2) 51.6%, transparent 52.0%),
-                repeating-linear-gradient(
-                    to bottom,
-                    rgba(255,255,255,0.1) 0,
-                    rgba(255,255,255,0.1) 8%,
-                    transparent 8%,
-                    transparent 18%
-                );
-            animation: roadFlow 0.8s linear infinite;
-            filter: blur(0.4px);
-        }
-
-        .road-perspective::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background:
-                linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8)),
-                radial-gradient(circle at 50% 28%, rgba(255, 174, 110, 0.18), transparent 18%),
-                linear-gradient(90deg, transparent 35%, rgba(255,120,50,0.14) 45%, rgba(255,120,50,0.18) 50%, rgba(255,120,50,0.14) 55%, transparent 65%);
-        }
-
-        .lane-markers {
-            position: absolute;
-            inset: 10% 0 0;
-            background:
-                repeating-linear-gradient(
-                    to bottom,
-                    transparent 0,
-                    transparent 10%,
-                    rgba(255,255,255,0.65) 10%,
-                    rgba(255,255,255,0.65) 13%,
-                    transparent 13%,
-                    transparent 20%
-                );
-            opacity: 0.85;
-            filter: drop-shadow(0 0 6px rgba(255,255,255,0.3));
-            animation: roadFlow 0.9s linear infinite;
-        }
-
-        .headlight-reflections {
-            position: absolute;
-            left: 50%;
-            bottom: 8%;
-            width: 74%;
-            height: 44%;
-            transform: translateX(-50%);
-            background: linear-gradient(to bottom, rgba(255,150,80,0.12), rgba(255,120,60,0.05) 32%, transparent 68%);
-            filter: blur(12px);
             pointer-events: none;
         }
 
-        .side-poles {
-            display: none;
-        }
-
-        .pole {
-            position: absolute;
-            bottom: 12%;
-            width: 3px;
-            height: 34vh;
-            background: linear-gradient(to top, rgba(255,255,255,0.12), rgba(255,255,255,0.4));
-            opacity: 0.7;
-            transform-origin: bottom center;
-            animation: poleFlicker 4.8s ease-in-out infinite;
-        }
-
-        .pole::before {
+        .motion-bg::before {
             content: "";
             position: absolute;
-            left: 50%;
-            bottom: 100%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 12px;
-            border-radius: 999px;
-            background: radial-gradient(circle, rgba(255, 218, 130, 0.98), rgba(255, 206, 84, 0.6), transparent 72%);
-            box-shadow: 0 0 14px rgba(255, 214, 118, 0.9), 0 0 30px rgba(255, 214, 118, 0.6);
-            opacity: 0.8;
-            animation: lightPulse 2.2s ease-in-out infinite;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(65, 105, 225, 0.08), rgba(25, 35, 80, 0.12) 50%, transparent);
+            animation: skyShift 20s ease-in-out infinite;
         }
 
-        .rain-layer {
+        .motion-bg::after {
+            content: "";
             position: absolute;
             inset: 0;
-            background-image:
-                linear-gradient(to bottom, rgba(255,255,255,0.12), transparent),
-                repeating-linear-gradient(to bottom, transparent 0 14px, rgba(255,255,255,0.12) 14px 15px);
-            opacity: 0.55;
-            transform: skewY(-8deg);
-            animation: rain 0.7s linear infinite;
-            filter: blur(0.2px);
+            background: linear-gradient(180deg, rgba(15, 20, 50, 0.3), rgba(0, 0, 0, 0.8));
+            pointer-events: none;
         }
 
-        .windshield-glow {
+        .star {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.08), rgba(255,255,255,0.02), rgba(255,255,255,0.08));
-            mix-blend-mode: screen;
+            border-radius: 50%;
+            background: #ffffff;
+            pointer-events: none;
+            box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
         }
 
-        @keyframes roadFlow {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(24%); }
+        .star.small {
+            width: 1px;
+            height: 1px;
         }
 
-        @keyframes rain {
-            0% { transform: translate3d(0, -10%, 0) skewY(-8deg); }
-            100% { transform: translate3d(-10px, 16%, 0) skewY(-8deg); }
+        .star.medium {
+            width: 2px;
+            height: 2px;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.9);
         }
 
-        @keyframes lightPulse {
-            0%, 100% { opacity: 0.2; filter: brightness(0.6); }
-            25% { opacity: 0.8; filter: brightness(1.2); }
-            50% { opacity: 1; filter: brightness(1.6); }
-            75% { opacity: 0.3; filter: brightness(0.8); }
+        .star.large {
+            width: 3px;
+            height: 3px;
+            box-shadow: 0 0 6px rgba(255, 255, 255, 1);
         }
 
-        @keyframes poleFlicker {
-            0%, 100% { opacity: 0.23; }
-            12% { opacity: 0.78; }
-            14% { opacity: 0.25; }
-            18% { opacity: 0.72; }
-            22% { opacity: 0.32; }
-            68% { opacity: 0.76; }
-            70% { opacity: 0.2; }
-            82% { opacity: 0.7; }
+        .star.blue {
+            background: rgba(135, 206, 250, 0.9);
+            box-shadow: 0 0 3px rgba(135, 206, 250, 0.8);
         }
 
-        @keyframes drive {
-            0% { transform: rotateX(65deg) translateY(0%); }
-            100% { transform: rotateX(65deg) translateY(20%); }
+        .star.cyan {
+            background: rgba(100, 200, 255, 0.85);
+            box-shadow: 0 0 3px rgba(100, 200, 255, 0.7);
         }
 
+        .meteor {
+            position: absolute;
+            width: 150px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            pointer-events: none;
+            filter: blur(1px);
+            opacity: 0;
+        }
+
+        @keyframes skyShift {
+            0%, 100% { background: radial-gradient(circle at 50% 50%, rgba(65, 105, 225, 0.08), rgba(25, 35, 80, 0.12) 50%, transparent); }
+            50% { background: radial-gradient(circle at 50% 30%, rgba(75, 120, 240, 0.1), rgba(35, 45, 100, 0.14) 50%, transparent); }
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes drift {
+            0% { transform: translateY(0) translateX(0); }
+            100% { transform: translateY(-100vh) translateX(var(--drift-x, 0)); }
+        }
+
+        @keyframes meteorShoot {
+            0% { opacity: 0; transform: translate(0, 0) rotate(45deg); }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; transform: translate(500px, 500px) rotate(45deg); }
+        }
         /* --- GLASS UI --- */
         .glass {
             background: var(--glass);
@@ -597,6 +431,9 @@
 </head>
 <body>
 
+    <!-- STARFIELD BACKGROUND -->
+    <div class="motion-bg" id="starfield-container"></div>
+
     <!-- START ENGINE OVERLAY -->
     <div id="overlay" class="start-screen">
         <h2 class="title-cinematic text-xs mb-8 opacity-40">System Ready</h2>
@@ -632,10 +469,10 @@
                     <p class="text-2xl font-light leading-relaxed">Ambient temperature is dropping. The fuel is low, but the music is just starting to get good.</p>
                 </div>
                 <div class="flex flex-col justify-end space-y-4 font-mono text-xs opacity-40 uppercase tracking-tighter">
-                    <div>Location: Unknown Coastline</div>
-                    <div>Traffic: Minimal</div>
+                    <div>Location: Unknown</div>
+                    <div>Noise: Zero</div>
                     <div>Mood: Introspective</div>
-                    <div>Time: 02:44 AM</div>
+                    <div>Time:<time datetime="2023-10-10T02:44:00Z"> 02:44 AM</time></div>
                 </div>
             </div>
         </section>
@@ -653,8 +490,8 @@
     <div class="dashboard-strip">
         <div class="dashboard-inner">
             <div class="dashboard-left">
-                <div class="radio-badge">Night Drive FM</div>
-                <div id="track-name" class="dashboard-title">Radio: Scanning...</div>
+                <div class="radio-badge">Night Drive</div>
+                <div id="track-name" class="dashboard-title">Music Loading....</div>
             </div>
 
             <div class="dashboard-progress">
@@ -692,7 +529,7 @@
             <div class="flex items-center justify-between mb-3">
                 <div>
                     <div class="text-[10px] tracking-[4px] uppercase text-cyan-400">Queue</div>
-                    <div class="text-[9px] opacity-40 tracking-[3px] uppercase mt-1">Night Drive FM</div>
+                    <div class="text-[9px] opacity-40 tracking-[3px] uppercase mt-1">Night Drive</div>
                 </div>
                 <button id="close-playlist" class="text-[10px] opacity-60 hover:opacity-100">Close</button>
             </div>
@@ -977,6 +814,69 @@
         });
 
         renderPlaylist();
+
+        // 3. STARFIELD BACKGROUND - Generate Animated Stars and Meteors
+        function generateStarfield() {
+            const container = document.getElementById('starfield-container');
+            const starCount = 300;
+            const colors = ['white', 'white', 'white', 'blue', 'cyan'];
+            
+            // Generate static stars with twinkling
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                const sizeType = ['small', 'medium', 'large'][Math.floor(Math.random() * 3)];
+                const colorType = colors[Math.floor(Math.random() * colors.length)];
+                
+                let starClass = `star ${sizeType}`;
+                if (colorType !== 'white') {
+                    starClass += ` ${colorType}`;
+                }
+                
+                star.className = starClass;
+                
+                const left = Math.random() * 100;
+                const top = Math.random() * 100;
+                const twinkleDuration = 2 + Math.random() * 3;
+                const twinbleDelay = Math.random() * 5;
+                
+                star.style.left = left + '%';
+                star.style.top = top + '%';
+                star.style.animation = `twinkle ${twinkleDuration}s ease-in-out ${twinbleDelay}s infinite`;
+                
+                container.appendChild(star);
+            }
+            
+            // Add occasional meteors
+            function createMeteor() {
+                const meteor = document.createElement('div');
+                meteor.className = 'meteor';
+                
+                const startX = Math.random() * 100;
+                const startY = Math.random() * 50;
+                const angle = 30 + Math.random() * 30;
+                
+                meteor.style.left = startX + '%';
+                meteor.style.top = startY + '%';
+                meteor.style.transform = `rotate(${angle}deg)`;
+                meteor.style.animation = `meteorShoot ${1.5 + Math.random() * 1}s ease-in infinite`;
+                meteor.style.animationDelay = Math.random() * 8 + 's';
+                
+                container.appendChild(meteor);
+            }
+            
+            // Create initial meteors and add new ones periodically
+            createMeteor();
+            createMeteor();
+            setInterval(createMeteor, 8000);
+        }
+
+        // Initialize starfield when page loads
+        window.addEventListener('load', generateStarfield);
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', generateStarfield);
+        } else {
+            generateStarfield();
+        }
     </script>
 </body>
 </html>
