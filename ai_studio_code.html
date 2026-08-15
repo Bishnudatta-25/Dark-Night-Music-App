@@ -172,6 +172,66 @@
             display: inline-flex;
         }
 
+        /* --- TRACK THUMBNAILS --- */
+        .track-thumbnail {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, rgba(100, 150, 255, 0.2), rgba(150, 100, 200, 0.2));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        }
+
+        .track-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .playlist-item:hover .track-thumbnail img {
+            opacity: 1;
+        }
+
+        .current-track-thumbnail {
+            width: 120px;
+            height: 120px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(100, 150, 255, 0.3), rgba(150, 100, 200, 0.3));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 200, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            margin: 0 auto 20px;
+        }
+
+        .current-track-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 12px;
+            animation: thumbnailGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes thumbnailGlow {
+            0%, 100% { filter: brightness(1) drop-shadow(0 0 8px rgba(0, 200, 255, 0.3)); }
+            50% { filter: brightness(1.1) drop-shadow(0 0 16px rgba(0, 200, 255, 0.5)); }
+        }
+
+        .thumbnail-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a2a4a 0%, #2a3a5a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 12px;
+        }
+
         /* --- GLASS UI --- */
         .glass {
             background: var(--glass);
@@ -508,6 +568,12 @@
             <div class="text-center">
                 <h1 class="title-cinematic text-3xl md:text-6xl mb-16">Night Drive</h1>
                 
+                <div id="now-playing-container" style="display: none;">
+                    <div class="current-track-thumbnail">
+                        <div class="thumbnail-placeholder">♪</div>
+                    </div>
+                </div>
+                
                 <div id="quote-container" class="mt-20 h-10">
                     <p id="quote-text" class="text-lg italic font-light text-white/50 transition-opacity duration-1000">
                         "The streetlights are the only guide we need."
@@ -677,6 +743,7 @@
             'xanny'
         ];
         let playlistItems = [];
+        let videoIdMap = {}; // Store video IDs for thumbnails
         const quotes = [
             "the road knows secrets we haven't told yet.",
             "static on the radio, magic in the air.",
@@ -699,14 +766,19 @@
 
             listEl.innerHTML = tracks.map((track, index) => {
                 const isCurrentTrack = index === currentIndex;
+                const videoId = videoIdMap[index] || '';
+                const thumbnailUrl = videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
+                
                 return `
                 <button
                     data-index="${index}"
-                    class="playlist-item w-full text-left rounded-xl border border-white/5 px-3 py-2 transition-all hover:border-cyan-400/50 hover:bg-white/5 ${isCurrentTrack ? 'bg-cyan-400/10 border-cyan-400/40 current' : ''}"
+                    class="playlist-item w-full text-left rounded-xl border border-white/5 px-2 py-2 transition-all hover:border-cyan-400/50 hover:bg-white/5 ${isCurrentTrack ? 'bg-cyan-400/10 border-cyan-400/40 current' : ''}"
                     type="button"
                 >
-                    <div class="flex items-center justify-between gap-3">
-                        <div class="text-[10px] tracking-[3px] uppercase opacity-60">${String(index + 1).padStart(2, '0')}</div>
+                    <div class="flex items-center justify-between gap-2">
+                        <div class="track-thumbnail">
+                            ${thumbnailUrl ? `<img src="${thumbnailUrl}" alt="${track.label}" onerror="this.parentElement.innerHTML='<div class=\\'thumbnail-placeholder\\'>♪</div>'">` : '<div class="thumbnail-placeholder">♪</div>'}
+                        </div>
                         <div class="flex items-center gap-2 flex-1 min-w-0">
                             <div class="playlist-track-icon">
                                 ${isCurrentTrack ? '<span>♪</span>' : '<span>♫</span>'}
@@ -743,10 +815,14 @@
             try {
                 const ids = player.getPlaylist() || [];
                 if (ids.length) {
-                    playlistItems = ids.map((_, index) => ({
-                        id: index,
+                    playlistItems = ids.map((videoId, index) => ({
+                        id: videoId,
                         label: fallbackPlaylistTracks[index] || `Night Drive ${String(index + 1).padStart(2, '0')}`
                     }));
+                    // Store video IDs for thumbnail generation
+                    ids.forEach((videoId, index) => {
+                        videoIdMap[index] = videoId;
+                    });
                     renderPlaylist();
                 } else {
                     playlistItems = fallbackPlaylistTracks.map((label, index) => ({ id: index + 1, label }));
@@ -806,6 +882,7 @@
             const icon = document.getElementById('play-icon');
             const nameEl = document.getElementById('track-name');
             const playingIndicator = document.getElementById('playing-indicator');
+            const nowPlayingContainer = document.getElementById('now-playing-container');
 
             if (event.data === YT.PlayerState.PLAYING) {
                 icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
@@ -815,10 +892,24 @@
                 try {
                     const data = player.getVideoData();
                     nameEl.innerText = data.title || 'Night Drive FM';
+                    
+                    // Display thumbnail for current track
+                    const currentIndex = player.getPlaylistIndex();
+                    const videoId = videoIdMap[currentIndex];
+                    if (videoId && nowPlayingContainer) {
+                        const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                        nowPlayingContainer.innerHTML = `
+                            <div class="current-track-thumbnail">
+                                <img src="${thumbnailUrl}" alt="Now Playing" onerror="this.parentElement.innerHTML='<div class=\\'thumbnail-placeholder\\'>♪</div>'">
+                            </div>
+                        `;
+                        nowPlayingContainer.style.display = 'block';
+                    }
                 } catch (e) {}
             } else {
                 icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
                 if (playingIndicator) playingIndicator.style.display = 'none';
+                if (nowPlayingContainer) nowPlayingContainer.style.display = 'none';
             }
         }
 
