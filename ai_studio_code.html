@@ -198,27 +198,51 @@
         }
 
         .current-track-thumbnail {
-            width: 120px;
-            height: 120px;
-            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 8px;
             background: linear-gradient(135deg, rgba(100, 150, 255, 0.3), rgba(150, 100, 200, 0.3));
             border: 1px solid rgba(255, 255, 255, 0.15);
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 200, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            margin: 0 auto 20px;
+            box-shadow: 0 4px 16px rgba(0, 200, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
         .current-track-thumbnail img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 12px;
-            animation: thumbnailGlow 3s ease-in-out infinite;
+            border-radius: 8px;
+            opacity: 0.95;
+            transition: opacity 0.3s ease;
         }
 
-        @keyframes thumbnailGlow {
-            0%, 100% { filter: brightness(1) drop-shadow(0 0 8px rgba(0, 200, 255, 0.3)); }
-            50% { filter: brightness(1.1) drop-shadow(0 0 16px rgba(0, 200, 255, 0.5)); }
+        .dashboard-left:hover .current-track-thumbnail img {
+            opacity: 1;
+        }
+
+        .dashboard-track-thumbnail {
+            width: 50px;
+            height: 50px;
+            min-width: 50px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(100, 150, 255, 0.3), rgba(150, 100, 200, 0.3));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 200, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .dashboard-track-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+            opacity: 0.95;
+            transition: opacity 0.3s ease;
+        }
+
+        .dashboard-left:hover .dashboard-track-thumbnail img {
+            opacity: 1;
         }
 
         .thumbnail-placeholder {
@@ -248,87 +272,6 @@
             background: linear-gradient(to bottom, #fff 0%, #666 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        /* --- INTERACTIONS --- */
-        .headlight-flash {
-            position: fixed;
-            inset: 0;
-            background: white;
-            opacity: 0;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        .center-console-glow {
-            position: absolute;
-            left: 50%;
-            bottom: 8.5rem;
-            transform: translateX(-50%);
-            width: min(34vw, 320px);
-            height: 72px;
-            border-radius: 999px;
-            background: radial-gradient(circle, rgba(118, 238, 255, 0.32), rgba(34, 64, 81, 0.18) 42%, transparent 72%);
-            filter: blur(18px);
-            pointer-events: none;
-            opacity: 0.9;
-        }
-
-        .steering-wheel {
-            position: absolute;
-            left: 50%;
-            bottom: 7.5rem;
-            width: 200px;
-            height: 200px;
-            transform: translateX(-50%);
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.12);
-            background: radial-gradient(circle at center, rgba(30, 32, 36, 0.4), rgba(8, 9, 12, 0.9) 58%, rgba(0,0,0,0.92) 76%);
-            box-shadow: inset 0 0 18px rgba(255,255,255,0.05), 0 18px 40px rgba(0,0,0,0.45);
-            opacity: 0.96;
-        }
-
-        .steering-wheel::before,
-        .steering-wheel::after {
-            content: "";
-            position: absolute;
-            inset: 18px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .steering-wheel::after {
-            inset: 34px;
-            border-color: rgba(255,255,255,0.06);
-        }
-
-        .steering-spoke {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 2px;
-            height: 88px;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.12), rgba(255,255,255,0.45), rgba(255,255,255,0.12));
-            transform-origin: center;
-            border-radius: 999px;
-        }
-
-        .steering-spoke:nth-child(1) { transform: translate(-50%, -50%) rotate(0deg); }
-        .steering-spoke:nth-child(2) { transform: translate(-50%, -50%) rotate(45deg); }
-        .steering-spoke:nth-child(3) { transform: translate(-50%, -50%) rotate(90deg); }
-        .steering-spoke:nth-child(4) { transform: translate(-50%, -50%) rotate(135deg); }
-
-        .steering-center {
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            width: 28px;
-            height: 28px;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(110, 228, 255, 0.4), rgba(25, 41, 52, 0.9) 40%, rgba(0,0,0,0.95) 70%);
-            border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: 0 0 16px rgba(39, 193, 255, 0.25);
         }
 
         .start-screen {
@@ -406,7 +349,10 @@
 
         .dashboard-left {
             min-width: 0;
-            flex: 0 0 220px;
+            flex: 0 1 auto;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .radio-badge {
@@ -568,12 +514,6 @@
             <div class="text-center">
                 <h1 class="title-cinematic text-3xl md:text-6xl mb-16">Night Drive</h1>
                 
-                <div id="now-playing-container" style="display: none;">
-                    <div class="current-track-thumbnail">
-                        <div class="thumbnail-placeholder">♪</div>
-                    </div>
-                </div>
-                
                 <div id="quote-container" class="mt-20 h-10">
                     <p id="quote-text" class="text-lg italic font-light text-white/50 transition-opacity duration-1000">
                         "The streetlights are the only guide we need."
@@ -611,13 +551,18 @@
     <div class="dashboard-strip">
         <div class="dashboard-inner">
             <div class="dashboard-left">
-                <div class="radio-badge">Night Drive</div>
-                <div id="track-name-container" class="dashboard-title flex items-center">
-                    <span id="track-name">Music Loading....</span>
-                    <div id="playing-indicator" class="music-playing" style="display: none;">
-                        <div class="music-bar"></div>
-                        <div class="music-bar"></div>
-                        <div class="music-bar"></div>
+                <div id="dashboard-thumbnail" class="dashboard-track-thumbnail">
+                    <div class="thumbnail-placeholder">♪</div>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <div class="radio-badge">Night Drive</div>
+                    <div id="track-name-container" class="dashboard-title flex items-center">
+                        <span id="track-name">Music Loading....</span>
+                        <div id="playing-indicator" class="music-playing" style="display: none;">
+                            <div class="music-bar"></div>
+                            <div class="music-bar"></div>
+                            <div class="music-bar"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -882,7 +827,7 @@
             const icon = document.getElementById('play-icon');
             const nameEl = document.getElementById('track-name');
             const playingIndicator = document.getElementById('playing-indicator');
-            const nowPlayingContainer = document.getElementById('now-playing-container');
+            const dashboardThumbnail = document.getElementById('dashboard-thumbnail');
 
             if (event.data === YT.PlayerState.PLAYING) {
                 icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
@@ -893,23 +838,19 @@
                     const data = player.getVideoData();
                     nameEl.innerText = data.title || 'Night Drive FM';
                     
-                    // Display thumbnail for current track
+                    // Display thumbnail for current track in dashboard
                     const currentIndex = player.getPlaylistIndex();
                     const videoId = videoIdMap[currentIndex];
-                    if (videoId && nowPlayingContainer) {
+                    if (videoId && dashboardThumbnail) {
                         const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
-                        nowPlayingContainer.innerHTML = `
-                            <div class="current-track-thumbnail">
-                                <img src="${thumbnailUrl}" alt="Now Playing" onerror="this.parentElement.innerHTML='<div class=\\'thumbnail-placeholder\\'>♪</div>'">
-                            </div>
+                        dashboardThumbnail.innerHTML = `
+                            <img src="${thumbnailUrl}" alt="Now Playing" onerror="this.parentElement.innerHTML='<div class=\\'thumbnail-placeholder\\'>♪</div>'">
                         `;
-                        nowPlayingContainer.style.display = 'block';
                     }
                 } catch (e) {}
             } else {
                 icon.innerHTML = '<path d="M8 5v14l11-7z"/>';
                 if (playingIndicator) playingIndicator.style.display = 'none';
-                if (nowPlayingContainer) nowPlayingContainer.style.display = 'none';
             }
         }
 
