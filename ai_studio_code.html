@@ -172,6 +172,13 @@
             display: inline-flex;
         }
 
+        /* Mobile and Touch Optimizations */
+        @media (max-width: 768px) {
+            .dashboard-button, .dashboard-toggle, #volume-slider {
+                -webkit-tap-highlight-color: transparent;
+            }
+        }
+
         /* --- TRACK THUMBNAILS --- */
         .track-thumbnail {
             width: 40px;
@@ -198,21 +205,30 @@
         }
 
         .current-track-thumbnail {
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
-            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 6px;
             background: linear-gradient(135deg, rgba(100, 150, 255, 0.3), rgba(150, 100, 200, 0.3));
             border: 1px solid rgba(255, 255, 255, 0.15);
             overflow: hidden;
             box-shadow: 0 4px 16px rgba(0, 200, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
+        @media (max-width: 480px) {
+            .current-track-thumbnail {
+                width: 36px;
+                height: 36px;
+                min-width: 36px;
+                border-radius: 4px;
+            }
+        }
+
         .current-track-thumbnail img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 6px;
             opacity: 0.95;
             transition: opacity 0.3s ease;
         }
@@ -222,21 +238,30 @@
         }
 
         .dashboard-track-thumbnail {
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
-            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            border-radius: 6px;
             background: linear-gradient(135deg, rgba(100, 150, 255, 0.3), rgba(150, 100, 200, 0.3));
             border: 1px solid rgba(255, 255, 255, 0.15);
             overflow: hidden;
             box-shadow: 0 4px 16px rgba(0, 200, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
         }
 
+        @media (max-width: 480px) {
+            .dashboard-track-thumbnail {
+                width: 36px;
+                height: 36px;
+                min-width: 36px;
+                border-radius: 4px;
+            }
+        }
+
         .dashboard-track-thumbnail img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 6px;
             opacity: 0.95;
             transition: opacity 0.3s ease;
         }
@@ -270,6 +295,7 @@
             letter-spacing: 1.2rem;
             text-transform: uppercase;
             background: linear-gradient(to bottom, #fff 0%, #666 100%);
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -284,18 +310,36 @@
             align-items: center;
             justify-content: center;
             transition: opacity 1s ease;
+            padding: 1rem;
         }
 
         .playlist-panel {
             position: fixed;
-            right: 1.25rem;
-            bottom: 8.25rem;
-            width: min(320px, calc(100vw - 2rem));
+            right: 8px;
+            bottom: 8.5rem;
+            width: min(300px, calc(100vw - 16px));
             z-index: 120;
             opacity: 0;
             transform: translateY(12px);
             pointer-events: none;
             transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        @media (max-width: 768px) {
+            .playlist-panel {
+                right: 6px;
+                bottom: 7.5rem;
+                width: min(280px, calc(100vw - 12px));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .playlist-panel {
+                right: 4px;
+                bottom: 7rem;
+                width: calc(100vw - 8px);
+                max-width: 320px;
+            }
         }
 
         .playlist-panel.visible {
@@ -305,8 +349,14 @@
         }
 
         .playlist-scroll {
-            max-height: 260px;
+            max-height: 240px;
             overflow-y: auto;
+        }
+
+        @media (max-width: 480px) {
+            .playlist-scroll {
+                max-height: 200px;
+            }
         }
 
         .playlist-scroll::-webkit-scrollbar { width: 4px; }
@@ -318,25 +368,44 @@
         .dashboard-strip {
             position: fixed;
             left: 50%;
-            bottom: 18px;
+            bottom: 12px;
             transform: translateX(-50%);
-            width: min(92vw, 980px);
+            width: calc(100vw - 16px);
+            max-width: 980px;
             z-index: 100;
-            border-radius: 22px 22px 16px 16px;
+            border-radius: 16px;
             background: linear-gradient(180deg, rgba(17, 20, 28, 0.96), rgba(7, 9, 13, 0.98));
             border: 1px solid rgba(255, 255, 255, 0.09);
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.09), 0 28px 60px rgba(0,0,0,0.7);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            padding-top: 10px;
+            padding-top: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-strip {
+                bottom: 8px;
+                width: calc(100vw - 12px);
+                border-radius: 12px;
+                padding-top: 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-strip {
+                bottom: 6px;
+                width: calc(100vw - 8px);
+                border-radius: 10px;
+                padding-top: 4px;
+            }
         }
 
         .dashboard-track-label {
             position: absolute;
-            top: -40px;
+            top: -32px;
             left: 0;
-            font-size: 12px;
-            letter-spacing: 0.24rem;
+            font-size: 10px;
+            letter-spacing: 0.2rem;
             text-transform: uppercase;
             color: rgba(255,255,255,0.85);
             white-space: nowrap;
@@ -344,6 +413,12 @@
             text-overflow: ellipsis;
             max-width: 95%;
             font-weight: 500;
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-track-label {
+                display: none;
+            }
         }
 
         .dashboard-strip::before {
@@ -359,8 +434,23 @@
             position: relative;
             display: flex;
             align-items: center;
-            gap: 18px;
-            padding: 14px 18px 12px;
+            gap: 12px;
+            padding: 10px 12px 8px;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-inner {
+                gap: 8px;
+                padding: 8px 10px 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-inner {
+                gap: 6px;
+                padding: 6px 8px 4px;
+            }
         }
 
         .dashboard-left {
@@ -368,7 +458,13 @@
             flex: 0 1 auto;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-left {
+                gap: 6px;
+            }
         }
 
         .radio-badge {
@@ -380,9 +476,15 @@
             opacity: 0.9;
         }
 
+        @media (max-width: 480px) {
+            .radio-badge {
+                font-size: 7px;
+                letter-spacing: 0.2rem;
+            }
+        }
+
         .dashboard-title {
-            margin-top: 1.5cm;
-            margin-left: 2.3cm;
+            margin: 0;
             font-size: 11px;
             letter-spacing: 0.24rem;
             text-transform: uppercase;
@@ -392,32 +494,66 @@
             text-overflow: ellipsis;
         }
 
+        @media (max-width: 768px) {
+            .dashboard-title {
+                font-size: 9px;
+                letter-spacing: 0.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-title {
+                font-size: 8px;
+                letter-spacing: 0.15rem;
+            }
+        }
+
         .dashboard-progress {
             flex: 1 1 auto;
-            min-width: 0;
+            min-width: 80px;
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-progress {
+                min-width: 60px;
+            }
         }
 
         .dashboard-meta {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-family: 'Outfit', sans-serif;
-            font-size: 9px;
-            letter-spacing: 0.2rem;
+            font-size: 8px;
+            letter-spacing: 0.15rem;
             color: rgba(255,255,255,0.52);
             text-transform: uppercase;
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-meta {
+                font-size: 7px;
+                letter-spacing: 0.1rem;
+                margin-bottom: 4px;
+            }
         }
 
         #progress-area {
             position: relative;
             width: 100%;
-            height: 4px;
+            height: 3px;
             border-radius: 999px;
             background: rgba(255,255,255,0.08);
             overflow: hidden;
             cursor: pointer;
             box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+        }
+
+        @media (max-width: 480px) {
+            #progress-area {
+                height: 2px;
+            }
         }
 
         #progress-bar {
@@ -433,13 +569,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 8px;
             flex: 0 0 auto;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-controls {
+                gap: 6px;
+            }
         }
 
         .dashboard-button {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             border: 1px solid rgba(255,255,255,0.09);
             background: rgba(255,255,255,0.02);
@@ -448,6 +591,14 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-button {
+                width: 32px;
+                height: 32px;
+            }
         }
 
         .dashboard-button:hover {
@@ -457,11 +608,18 @@
         }
 
         .dashboard-button.primary {
-            width: 50px;
-            height: 50px;
+            width: 44px;
+            height: 44px;
             background: linear-gradient(180deg, rgba(103, 225, 255, 0.15), rgba(0, 198, 255, 0.08));
             border-color: rgba(124, 235, 255, 0.45);
             box-shadow: 0 0 18px rgba(0, 198, 255, 0.18);
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-button.primary {
+                width: 40px;
+                height: 40px;
+            }
         }
 
         .volume-stack {
@@ -470,10 +628,24 @@
             gap: 10px;
             padding-left: 8px;
             border-left: 1px solid rgba(255,255,255,0.08);
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .volume-stack {
+                gap: 6px;
+                padding-left: 6px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .volume-stack {
+                display: none;
+            }
         }
 
         .dashboard-toggle {
-            padding: 9px 12px;
+            padding: 8px 10px;
             border-radius: 999px;
             border: 1px solid rgba(255,255,255,0.08);
             background: rgba(255,255,255,0.02);
@@ -481,12 +653,27 @@
             font-size: 9px;
             letter-spacing: 0.22rem;
             text-transform: uppercase;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-toggle {
+                padding: 6px 8px;
+                font-size: 8px;
+            }
         }
 
         #volume-slider {
-            width: 90px;
+            width: 80px;
             accent-color: #69e7ff;
             opacity: 0.85;
+        }
+
+        @media (max-width: 768px) {
+            #volume-slider {
+                width: 60px;
+            }
         }
 
         /* --- SCROLLING --- */
@@ -501,7 +688,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            padding: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            section {
+                padding: 1.5rem 1rem;
+            }
         }
 
         ::-webkit-scrollbar { width: 0px; }
@@ -528,17 +721,16 @@
         
         <!-- SECTION 1: THE DASH -->
         <section>
-            <div class="text-center">
-                <h1 class="title-cinematic text-3xl md:text-6xl mb-16">Night Drive</h1>
+            <div class="text-center w-full">
+                <h1 class="title-cinematic text-2xl sm:text-3xl md:text-5xl lg:text-6xl mb-8 sm:mb-12 md:mb-16">Night Drive</h1>
                 
-                <div id="quote-container" class="mt-20 h-10">
-                    <p id="quote-text" class="text-lg italic font-light text-white/50 transition-opacity duration-1000">
+                <div id="quote-container" class="mt-12 sm:mt-16 md:mt-20 h-8 sm:h-10">
+                    <p id="quote-text" class="text-base sm:text-lg md:text-xl italic font-light text-white/50 transition-opacity duration-1000">
                         "The streetlights are the only guide we need."
                     </p>
                 </div>
             </div>
         </section>
-
     </div>
 
     <!-- MUSIC PLAYER -->
